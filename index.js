@@ -24,6 +24,7 @@ module.exports = function (text, content, callback) {
 function registerPartial(text, refrain, content) {
   var match = PARTIALS_REGEX.exec(text);
   if (match) {
+    if (!refrain.cacheMode || !handlebars.partials[match[1]]) {
     var isRelative = match[1].indexOf('.') === 0;
     var dir = isRelative ? path.dirname(content.page.filePath) : refrain.options.handlebars.partialsDir;
     var file = path.join(path.relative(refrain.options.srcDir, dir), match[1] + '.hbs').replace(/\\/g, '/');
@@ -31,6 +32,7 @@ function registerPartial(text, refrain, content) {
     if (partial) {
       handlebars.registerPartial(match[1], partial.page.template);
     }
-    registerPartial(text.substring(match[0].length), refrain, content);
+    }
+    registerPartial(text.substring(match.index + match[0].length), refrain, content);
   }
 }
