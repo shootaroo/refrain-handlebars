@@ -25,6 +25,26 @@ it('partial', function () {
   });
 });
 
+
+it('nested partial', function () {
+  target.call(refrain({
+    srcDir: 'test',
+    handlebars: {
+      partialsDir: 'test/partials'
+    }
+  }), '{{> buz}}', {
+    page: {
+      filePath: path.resolve('test/foo.hbs'),
+      data: {
+        foo: 'bar'
+      }
+    }
+  }, function (err, output) {
+    assert(output === '<i>buz</i>\n<h1>bar</h1>\n');
+  });
+});
+
+
 it('handlebars-helpers', function () {
 
   target.call(refrain({
